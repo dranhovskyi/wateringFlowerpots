@@ -8,7 +8,10 @@
     xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
     android:TabbedPage.ToolbarPlacement="Bottom">    
     <TabbedPage.Children>
-        <NavigationPage Title="Schedule" IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.schedule.png}">
+        <NavigationPage BarBackgroundColor="White"
+                        BarTextColor="Black"
+                        Title="Schedule"
+                        IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.schedule.png}">
             <x:Arguments>
                 <local:SchedulePage />
             </x:Arguments>

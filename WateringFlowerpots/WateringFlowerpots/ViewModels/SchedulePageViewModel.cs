@@ -19,16 +19,25 @@ namespace WateringFlowerpots.ViewModels
         public ICommand AddNewCommand { get; set; }
         public ICommand ItemTappedCommand { get; set; }
 
+        private List<FlowerpotGroup> flowerpots;
         public List<FlowerpotGroup> Flowerpots
         {
             get { return flowerpots; }
             set { SetProperty(ref flowerpots, value); }
         }
 
+        private bool isActive;
         public bool IsActive
         {
             get { return isActive; }
             set { SetProperty(ref isActive, value, RaiseIsActiveChanged); }
+        }
+
+        private bool isRefreshing;
+        public bool IsRefreshing
+        {
+            get { return isRefreshing; }
+            set { SetProperty(ref isRefreshing, value, RaiseIsActiveChanged); }
         }
 
         protected virtual void RaiseIsActiveChanged()
@@ -36,8 +45,6 @@ namespace WateringFlowerpots.ViewModels
             IsActiveChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private bool isActive;
-        private List<FlowerpotGroup> flowerpots;
         private readonly INavigationService navigationService;
         private readonly IPageDialogService dialogService;
         private readonly IFlowerpotRepository flowerpotRepository;
@@ -55,11 +62,7 @@ namespace WateringFlowerpots.ViewModels
             RefreshCommand = new Command(async() => await RefreshCommandAsync());
             ItemTappedCommand = new Command(async (obj) => await ItemTappedCommandAsync(obj));
             Flowerpots = new List<FlowerpotGroup>();
-        }
-
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            base.OnNavigatedFrom(parameters);
+            RefreshCommand.Execute(null);
         }
 
         private async Task ShowAddModalAsync()
@@ -71,13 +74,15 @@ namespace WateringFlowerpots.ViewModels
         {
             var allFlowerpots = await flowerpotRepository.GetAllFlowerpotAsync();
             Flowerpots = GetGroupedAndSortedList(allFlowerpots);
+
+            IsRefreshing = false;
         }
 
         private async Task ItemTappedCommandAsync(object obj)
         {
             if (obj is Flowerpot flowerpot)
             {
-                var action = await dialogService.DisplayActionSheetAsync("Select an action", "Cancel", "Delete");
+                var action = await dialogService.DisplayActionSheetAsync("Select an action", "Cancel", null, "Delete");
                 switch (action)
                 {
                     case "Delete":
@@ -90,9 +95,9 @@ namespace WateringFlowerpots.ViewModels
 
         private List<FlowerpotGroup> GetGroupedAndSortedList(List<Flowerpot> flowerpots)
         {
-            //TODO: Date of waterfill
-            DayOfWeek today = DateTime.Today.DayOfWeek;
-            DayOfWeek tomorrow = DateTime.Today.DayOfWeek + 1;
+            DateTime todayDateTime = DateTime.Today;
+            DayOfWeek today = todayDateTime.DayOfWeek;
+            DayOfWeek tomorrow = todayDateTime.DayOfWeek + 1;
 
             var todayList = new List<Flowerpot>();
             var tomorrowList = new List<Flowerpot>();
@@ -102,14 +107,19 @@ namespace WateringFlowerpots.ViewModels
             {
                 if (flowerpot.DayOfTheWeek == today.ToString())
                 {
+                    flowerpot.Date = todayDateTime;
                     todayList.Add(flowerpot);
                 }
                 else if (flowerpot.DayOfTheWeek == tomorrow.ToString())
                 {
+                    flowerpot.Date = todayDateTime.AddDays(1);
                     tomorrowList.Add(flowerpot);
                 }
                 else
                 {
+                    int daysUntilTuesday = ((int)Enum.Parse(typeof(DayOfWeek), flowerpot.DayOfTheWeek) - (int)today + 7) % 7;
+                    DateTime nextDayOfTheWeek = todayDateTime.AddDays(daysUntilTuesday);
+                    flowerpot.Date = nextDayOfTheWeek;
                     comingSoon.Add(flowerpot);
                 }
             }
@@ -126,6 +136,7 @@ namespace WateringFlowerpots.ViewModels
             }
             if (comingSoon.Any())
             {
+                comingSoon = comingSoon.AsParallel().OrderBy(p => p.Date).ToList();
                 listOfGorups.Add(new FlowerpotGroup("Coming soon", comingSoon));
             }
 

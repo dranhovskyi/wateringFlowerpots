@@ -31,5 +31,11 @@ namespace WateringFlowerpots.Models
                 });
             }
         }
+
+        [Ignore]
+        public DateTime Date { get; set; }
+
+        [Ignore]
+        public string EveryDay { get => "Every " + this.DayOfTheWeek; }
     }
 }

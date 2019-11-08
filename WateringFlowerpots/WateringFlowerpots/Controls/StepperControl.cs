@@ -27,7 +27,7 @@ namespace WateringFlowerpots.Controls
         }
 
         private readonly Button minusButton;
-        private readonly Entry entry;
+        private readonly Label label;
         private readonly Button plusButton;
 
         public StepperControl()
@@ -46,10 +46,12 @@ namespace WateringFlowerpots.Controls
             };
             minusButton.Clicked += MinusButtonClicked;
 
-            entry = new Entry
+            label = new Label
             {
+                Text = "0",
                 VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center
+                HorizontalTextAlignment = TextAlignment.Center,
+                BackgroundColor = Color.White
             };
 
             plusButton = new Button
@@ -59,8 +61,8 @@ namespace WateringFlowerpots.Controls
             };
             plusButton.Clicked += PlusButtonClicked;
 
-            Children.Add(entry, 0, 0);
-            Grid.SetColumnSpan(entry, 3);
+            Children.Add(label, 0, 0);
+            Grid.SetColumnSpan(label, 3);
             Children.Add(minusButton, 0, 0);
             Children.Add(plusButton, 2, 0);
         }
@@ -84,7 +86,7 @@ namespace WateringFlowerpots.Controls
 
             if (propertyName == CountProperty.PropertyName)
             {
-                entry.Text = Count.ToString();
+                label.Text = Count.ToString();
             }
         }
     }

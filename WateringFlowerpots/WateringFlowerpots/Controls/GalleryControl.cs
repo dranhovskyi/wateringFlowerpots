@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using DryIoc;
+using FFImageLoading.Cache;
+using FFImageLoading.Forms;
+using FFImageLoading.Transformations;
+using FFImageLoading.Work;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions;
@@ -30,7 +35,7 @@ namespace WateringFlowerpots.Controls
             }
         }
 
-        private readonly Image image;
+        private readonly CachedImage image;
         private readonly Button addPhotoButton;
         private readonly IPageDialogService dialogService;
 
@@ -40,8 +45,24 @@ namespace WateringFlowerpots.Controls
 
             Orientation = StackOrientation.Horizontal;
 
-            image = new Image { HeightRequest = 100 };
-            addPhotoButton = new Button { Text = " ADD PHOTO ", HeightRequest = 30, VerticalOptions = LayoutOptions.Center };
+            image = new CachedImage
+            {
+                HeightRequest = 70,
+                WidthRequest = 70,
+                CacheType = CacheType.None,
+                Transformations = new List<ITransformation>
+                {
+                    new RoundedTransformation { Radius = 25 }
+                }
+            };
+
+            addPhotoButton = new Button
+            {
+                Style = (Style)Application.Current.Resources["greenButton"],
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
+                Text = " ADD PHOTO ",
+                VerticalOptions = LayoutOptions.Center
+            };
             addPhotoButton.Clicked += ButtonClicked;
 
             Children.Add(image);

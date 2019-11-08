@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Navigation;
+using Prism.Services;
 using WateringFlowerpots.Extensions;
 using WateringFlowerpots.Helpers;
 using WateringFlowerpots.Repository;
@@ -13,6 +15,7 @@ namespace WateringFlowerpots.ViewModels
     {
         public ICommand CloseModalCommand { get; set; }
         public ICommand SaveCommand { get; set; }
+        public List<string> DaysOfTheWeek { get; set; }
 
         private string flowerpotName;
         public string FlowerpotName
@@ -42,38 +45,54 @@ namespace WateringFlowerpots.ViewModels
             set { SetProperty(ref imagePath, value); }
         }
 
-        public List<string> DaysOfTheWeek { get; set; }
-
         private readonly INavigationService navigationService;
+        private readonly IPageDialogService pageDialogService;
         private readonly IFlowerpotRepository flowerpotRepository;
 
         public NewFlowerpotPageViewModel(INavigationService navigationService,
+            IPageDialogService pageDialogService,
             IFlowerpotRepository flowerpotRepository)
             : base(navigationService)
         {
             this.navigationService = navigationService;
+            this.pageDialogService = pageDialogService;
             this.flowerpotRepository = flowerpotRepository;
 
-            CloseModalCommand = new Command(CloseModalAsync);
-            SaveCommand = new Command(SaveCommandAsync);
+            CloseModalCommand = new Command(async () => await CloseModalAsync());
+            SaveCommand = new Command(async () => await SaveCommandAsync());
             DaysOfTheWeek = new List<string>(CustomHelpers.GetWeekdays(DayOfWeek.Monday));
         }
 
-        public override void OnNavigatedFrom(INavigationParameters parameters)
+        private async Task SaveCommandAsync()
         {
-            base.OnNavigatedFrom(parameters);
+            if (ValidateFlowerpot())
+            {
+                var image = await ImagePath.GetBase64FromImageByteArrayAsync();
+                await flowerpotRepository.AddNewFlowerpotAsync(image, flowerpotName, volumeCount, selectedDayOfTheWeek);
+                await navigationService.GoBackAsync();
+            }
+            else
+            {
+                await pageDialogService.DisplayAlertAsync("Validation warning",
+                    "Please fill all required data", "OK");
+            }
         }
 
-        private async void SaveCommandAsync(object obj)
+        private async Task CloseModalAsync()
         {
-            var image = await ImagePath.GetBase64FromImageByteArrayAsync();
-            await flowerpotRepository.AddNewFlowerpotAsync(image, flowerpotName, volumeCount, selectedDayOfTheWeek);
             await navigationService.GoBackAsync();
         }
 
-        private async void CloseModalAsync(object obj)
+        private bool ValidateFlowerpot()
         {
-            await navigationService.GoBackAsync();
-        }        
+            if (string.IsNullOrEmpty(ImagePath) ||
+                string.IsNullOrWhiteSpace(FlowerpotName) ||
+                string.IsNullOrEmpty(SelectedDayOfTheWeek))
+            {
+                return false;
+            }
+
+            return true;
+        }       
     }
 }
