@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="4.3.0.947036" />
+    <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1367" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
+    <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\" />
+    <Folder Include="Models\" />
+    <Folder Include="Repository\" />
+    <Folder Include="Controls\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Converters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\refresh.svg" />
+    <None Remove="Resources\refresh.png" />
+    <None Remove="Resources\add.png" />
+    <None Remove="Resources\garden.png" />
+    <None Remove="Resources\notification.png" />
+    <None Remove="Resources\profile.png" />
+    <None Remove="Resources\schedule.png" />
+    <None Remove="Resources\close.png" />
+    <None Remove="Resources\minus.png" />
+    <None Remove="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\refresh.png" />
+    <EmbeddedResource Include="Resources\add.png" />
+    <EmbeddedResource Include="Resources\garden.png" />
+    <EmbeddedResource Include="Resources\notification.png" />
+    <EmbeddedResource Include="Resources\profile.png" />
+    <EmbeddedResource Include="Resources\schedule.png" />
+    <EmbeddedResource Include="Resources\close.png" />
+    <EmbeddedResource Include="Resources\minus.png" />
+    <EmbeddedResource Include="Resources\plus.png" />
+  </ItemGroup>
+</Project>

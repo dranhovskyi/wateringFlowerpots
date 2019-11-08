@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<prism:PrismApplication
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
+    xmlns:c="clr-namespace:WateringFlowerpots.Converters"
+    xmlns:local="clr-namespace:WateringFlowerpots"
+    x:Class="WateringFlowerpots.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <c:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+            <Style TargetType="Entry">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="BackgroundColor" Value="White" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="{Static local:ConstColors.DarkGreen}" />
+                <Setter Property="CornerRadius" Value="10" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</prism:PrismApplication>

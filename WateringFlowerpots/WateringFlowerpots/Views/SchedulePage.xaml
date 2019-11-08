@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="WateringFlowerpots.Views.SchedulePage"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    xmlns:extensions="clr-namespace:WateringFlowerpots.Extensions"
+    xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    xmlns:local="clr-namespace:WateringFlowerpots"
+    Title="My Plants"
+    BackgroundColor="{Static local:ConstColors.BackgroundColor}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Text="Refresh" Priority="0" Command="{Binding RefreshCommand}" IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.refresh.png}" />
+        <ToolbarItem Order="Primary" Text="Add" Priority="1" Command="{Binding AddNewCommand}" IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.add.png}" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding Flowerpots}"
+                  SelectionMode="None"
+                  SeparatorVisibility="None"
+                  HasUnevenRows="True"
+                  IsGroupingEnabled="True">
+            <ListView.Behaviors>
+                <b:EventToCommandBehavior EventName="ItemTapped" 
+                    Command="{Binding ItemTappedCommand}"
+                    EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Frame HasShadow="False" Margin="20, 10">
+                            <Grid ColumnSpacing="0"
+                                    RowSpacing="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20*" />
+                                    <ColumnDefinition Width="80*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+                                <ffimageloading:CachedImage
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="3"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+			                        WidthRequest="50"
+                                    HeightRequest="50"
+			                        Source="{Binding Image}">
+                                    <ffimageloading:CachedImage.Transformations>
+                                        <fftransformations:RoundedTransformation Radius="25" />
+                                    </ffimageloading:CachedImage.Transformations>
+		                        </ffimageloading:CachedImage>
+                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Name}"></Label>
+                            </Grid>
+                        </Frame>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ContentView BackgroundColor="White">
+                            <Label Text="{Binding Name}"
+                                    Margin="20,0"
+                                    FontSize="Large"
+                                    TextColor="LightGray"
+                                    FontAttributes="Bold" />
+                        </ContentView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="WateringFlowerpots.Views.NewFlowerpotPage"
+    xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:controls="clr-namespace:WateringFlowerpots.Controls"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    xmlns:extensions="clr-namespace:WateringFlowerpots.Extensions"
+    ios:Page.UseSafeArea="true"
+    prism:ViewModelLocator.AutowireViewModel="True">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical" Margin="20, 0" Spacing="10">
+                <StackLayout Orientation="Horizontal" Margin="0,20,0,0">
+                    <Label Text="New Plant"
+                           FontSize="Large"
+                           FontAttributes="Bold"
+                           VerticalTextAlignment="Center"
+                           HorizontalOptions="StartAndExpand"/>
+                    <Button ImageSource="{extensions:ImageResource WateringFlowerpots.Resources.close.png}"
+                            Command="{Binding CloseModalCommand}" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" />
+                </StackLayout>
+                <Label Text="PLANT PHOTO" />
+                <controls:GalleryControl ImagePath="{Binding ImagePath, Mode=TwoWay}" />
+                <Label Text="NAME" />
+                <Entry Text="{Binding FlowerpotName, Mode=TwoWay}" Placeholder="Type plants name"/>
+                <Label Text="FLOWERPOT SIZE" />
+                <controls:StepperControl Count="{Binding VolumeCount, Mode=TwoWay}" HorizontalOptions="CenterAndExpand" />
+                <Label Text="WATERING FREQUENCY" />
+                <Picker ItemsSource="{Binding DaysOfTheWeek}" SelectedItem="{Binding SelectedDayOfTheWeek}" />
+                <Button Text="SAVE" Command="{Binding SaveCommand}" VerticalOptions="End" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
