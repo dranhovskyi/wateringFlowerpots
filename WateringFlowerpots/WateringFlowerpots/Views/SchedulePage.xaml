@@ -1,53 +1,56 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
+    x:Class="WateringFlowerpots.Views.SchedulePage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="WateringFlowerpots.Views.SchedulePage"
+    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:extensions="clr-namespace:WateringFlowerpots.Extensions"
     xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:fftransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-    xmlns:extensions="clr-namespace:WateringFlowerpots.Extensions"
-    xmlns:behaviors="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
-    xmlns:controls="clr-namespace:WateringFlowerpots.Controls"
-    prism:ViewModelLocator.AutowireViewModel="True"
     xmlns:local="clr-namespace:WateringFlowerpots"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
     Title="My Plants"
+    prism:ViewModelLocator.AutowireViewModel="True"
     BackgroundColor="{Static local:ConstColors.BackgroundColor}">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Order="Primary"
-                     Text="Refresh"
-                     Priority="0"
-                     Command="{Binding RefreshCommand}"
-                     IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.refresh.png}" />
-        <ToolbarItem Order="Primary"
-                     Text="Add"
-                     Priority="1"
-                     Command="{Binding AddNewCommand}"
-                     IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.add.png}" />
+        <ToolbarItem
+            Command="{Binding RefreshCommand}"
+            IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.refresh.png}"
+            Order="Primary"
+            Priority="0"
+            Text="Refresh" />
+        <ToolbarItem
+            Command="{Binding AddNewCommand}"
+            IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.add.png}"
+            Order="Primary"
+            Priority="1"
+            Text="Add" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Flowerpots}"
-                  SelectionMode="None"
-                  SeparatorVisibility="None"
-                  HasUnevenRows="True"
-                  IsPullToRefreshEnabled="True"
-                  RefreshCommand="{Binding RefreshCommand}"
-                  IsRefreshing="{Binding IsRefreshing}"
-                  IsGroupingEnabled="True">
+        <ListView
+            HasUnevenRows="True"
+            IsGroupingEnabled="True"
+            IsPullToRefreshEnabled="True"
+            IsRefreshing="{Binding IsRefreshing}"
+            ItemsSource="{Binding Flowerpots}"
+            RefreshCommand="{Binding RefreshCommand}"
+            SelectionMode="None"
+            SeparatorVisibility="None">
             <ListView.Behaviors>
-                <behaviors:EventToCommandBehavior EventName="ItemTapped" 
+                <behaviors:EventToCommandBehavior
                     Command="{Binding ItemTappedCommand}"
-                    EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                    EventArgsConverter="{StaticResource itemTappedEventArgsConverter}"
+                    EventName="ItemTapped" />
             </ListView.Behaviors>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Frame BackgroundColor="{Binding DayOfTheWeek, Converter={StaticResource viewCellColorConverter}"
-                               HasShadow="False"
-                               CornerRadius="20"
-                               Margin="20, 10">
-                            <Grid ColumnSpacing="10"
-                                    RowSpacing="3">
+                        <Frame
+                            Margin="20,10"
+                            BackgroundColor="{Binding DayOfTheWeek, Converter={StaticResource viewCellColorConverter}}"
+                            CornerRadius="20"
+                            HasShadow="False">
+                            <Grid ColumnSpacing="10" RowSpacing="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20*" />
                                     <ColumnDefinition Width="80*" />
@@ -58,22 +61,32 @@
                                     <RowDefinition Height="1*" />
                                 </Grid.RowDefinitions>
                                 <ffimageloading:CachedImage
-                                    Grid.Column="0"
                                     Grid.Row="0"
                                     Grid.RowSpan="3"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center"
-			                        WidthRequest="50"
-                                    HeightRequest="50"
+                                    Grid.Column="0"
                                     CacheType="None"
-			                        Source="{Binding Image}">
+                                    HeightRequest="50"
+                                    HorizontalOptions="Center"
+                                    Source="{Binding Image}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="50">
                                     <ffimageloading:CachedImage.Transformations>
                                         <fftransformations:RoundedTransformation Radius="25" />
                                     </ffimageloading:CachedImage.Transformations>
-		                        </ffimageloading:CachedImage>
-                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Name}" FontAttributes="Bold" />
-                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Date, Converter={StaticResource dateTimeToLocalDateConverter}}" />
-                                <Label Grid.Column="1" Grid.Row="2" Text="{Binding EveryDay}" />
+                                </ffimageloading:CachedImage>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                    Text="{Binding Name}" />
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="{Binding Date, Converter={StaticResource dateTimeToLocalDateConverter}}" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Text="{Binding EveryDay}" />
                             </Grid>
                         </Frame>
                     </ViewCell>
@@ -83,11 +96,12 @@
                 <DataTemplate>
                     <ViewCell>
                         <ContentView BackgroundColor="White">
-                            <Label Text="{Binding Name}"
-                                    Margin="20,0"
-                                    FontSize="Large"
-                                    TextColor="LightGray"
-                                    FontAttributes="Bold" />
+                            <Label
+                                Margin="20,0"
+                                FontAttributes="Bold"
+                                FontSize="Large"
+                                Text="{Binding Name}"
+                                TextColor="LightGray" />
                         </ContentView>
                     </ViewCell>
                 </DataTemplate>

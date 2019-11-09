@@ -1,21 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <TabbedPage
+    x:Class="WateringFlowerpots.Views.MainTabbedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="WateringFlowerpots.Views.MainTabbedPage"
-    xmlns:local="clr-namespace:WateringFlowerpots.Views"
-    xmlns:extensions="clr-namespace:WateringFlowerpots.Extensions"
     xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-    android:TabbedPage.ToolbarPlacement="Bottom">    
+    xmlns:extensions="clr-namespace:WateringFlowerpots.Extensions"
+    xmlns:local="clr-namespace:WateringFlowerpots.Views"
+    android:TabbedPage.ToolbarPlacement="Bottom">
     <TabbedPage.Children>
-        <NavigationPage BarBackgroundColor="White"
-                        BarTextColor="Black"
-                        Title="Schedule"
-                        IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.schedule.png}">
+        <NavigationPage
+            Title="Schedule"
+            BarBackgroundColor="White"
+            BarTextColor="Black"
+            IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.schedule.png}">
             <x:Arguments>
                 <local:SchedulePage />
             </x:Arguments>
-        </NavigationPage>  
+        </NavigationPage>
         <local:GardenPage IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.garden.png}" />
         <local:NotificationPage IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.notification.png}" />
         <local:ProfilePage IconImageSource="{extensions:ImageResource WateringFlowerpots.Resources.profile.png}" />
